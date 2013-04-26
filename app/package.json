@@ -1,0 +1,31 @@
+{
+  "name": "Express-on-dotCloud",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "express": "3.0.x",
+    "jade": "*",
+    "connect-redis": "*",
+    "validator": "*",
+    "redis" : ""
+  },
+  "description": "Boiler plate Express for dotCloud",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dotcloud/express-on-dotcloud"
+  },
+  "keywords": [
+    "express",
+    "boiler",
+    "plate",
+    "for",
+    "dotCloud"
+  ],
+  "author": "jr@dotcloud.com",
+  "license": "BSD"
+}
