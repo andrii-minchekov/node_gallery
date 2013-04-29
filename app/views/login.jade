@@ -2,7 +2,7 @@ extends layout
 
 block content
     div.span8.offset2
-            form.form-horizontal(method="POST", action="/init-session")
+            form#signin.form-horizontal(method="POST", action="/init-session")
                 if (error)
                     - var classError = "error"
                 else
@@ -16,7 +16,7 @@ block content
                             span.help-inline= error
                     label.control-label(for="email") Password:
                     div.controls
-                        input(type="text", name="password", id="password", placeholder="Enter password")
+                        input(type="text", name="passwd", id="passwd", placeholder="Enter password")
                         if (error)
                             span.help-inline= error
                     
@@ -24,3 +24,19 @@ block content
                         button.btn.btn-primary(type="submit") Sign in
                         a(href="/signup")
                             button.btn.btn-warning(type="button") Sign up
+    script(type="text/javascript")
+        $(document).ready(function () {
+            $("#signin").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    passwd: {
+                        required: true,
+                        minlength: 2
+                    }
+                },
+                errorClass: "help-inline"
+            });
+        });

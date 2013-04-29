@@ -7,6 +7,7 @@ var routes = require('./routes');
 var http = require('http');
 var path = require('path');
 var RedisStore = require('connect-redis')(express);
+var expressValidator = require('express-validator');
 
 // Let's group our tools together
 var tools = require('./tools.js');
@@ -39,6 +40,7 @@ app.configure(function()//noinspection JSValidateTypes,JSValidateTypes
 
   // Setup the favicon, if no path given a default favicon is used
   app.use(express.favicon());
+  app.use(expressValidator);
 
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
@@ -69,7 +71,7 @@ app.configure(function()//noinspection JSValidateTypes,JSValidateTypes
       res.locals.error = undefined;
 
     // Something you may want to do
-    // res.locals.session = req.session;
+    res.locals.session = req.session;
     // instead of passing {session: req.session} in every routes. Nice right ?
     // if you do this way you can make routes in routes/index.js less verbose
     // for example line 21 in routes/index.js would become:
@@ -97,19 +99,21 @@ app.configure('development', function(){
 app.get('/', mid.auth, routes.index);
 app.get('/index', routes.index);
 
+app.get('/signup', function(req, res){
+    res.render('registration', {title: "Registration"});
+});
 app.post('/signup', routes.registration);
-app.get('/signup', routes.registration);
-app.get('/signin', routes.login);
-app.get('/usergallery', routes.gallery);
 
+app.get('/signin', routes.login);
+// Handle the authentication
+app.post('/init-session', routes.initSession);
+
+app.get('/usergallery', routes.gallery);
 // Actually let's have a polite url, by redirecting you to /Welcome, it looks nicer
 app.get('/welcome', mid.auth, routes.welcome);
 
 // A non protected route where to redirect the user to he can enter his email addresse
 app.get('/who-are-you', routes.login);
-
-// Handle the authentication
-app.post('/init-session', routes.initSession);
 
 // An admin page complety hardcoded ?
 app.get('/admin', mid.auth, mid.admin, routes.admin);

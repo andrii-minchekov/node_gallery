@@ -10,6 +10,7 @@
     "jade": "*",
     "connect-redis": "*",
     "validator": "*",
+    "express-validator": "*",
     "redis" : ""
   },
   "description": "Boiler plate Express for dotCloud",

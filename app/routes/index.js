@@ -7,8 +7,12 @@ var redisConfig = {
 };
 
 // Never trust your users, this modules is great for protecting yourself
-var check = require('validator').check;
-var sanitize = require('validator').sanitize;
+//var check = require('validator').check;
+//var sanitize = require('validator').sanitize;
+//var check = require('express-express-validator').Validator;
+//use it like validator.check('email', "Email is not valid").len(6, 64).isEmail();
+//var sanitize = require('express-express-validator').Filter;
+// use it like this sanitize.trim();
 
 // Let's add some fun into this
 var gravatar = require('../lib/gravatar.js').avatar;
@@ -35,12 +39,19 @@ exports.welcome = function(req, res){
 //My registration Form
 exports.registration = function (req,res) {
     //TODO validation of user input
-    if (req.body.fname && req.body.lname) {
-        res.redirect('/usergallery');
-        return;
-    }
-    res.render('registration', {title: "Registration"});
+    req.assert("fname", "Fname is Empty").notEmpty();
+    req.assert("lname", "Lname is empty").notEmpty();
+    req.assert("email", "Email is not valid").notEmpty().len(6,64).isEmail();
+    req.assert("passwd", "Password is not proper").len(2);
+    req.assert("passwd", "Error password confirmation").equals(req.body.conpasswd);
+    var mappedErrors = req.validationErrors(true);
+    if (mappedErrors){
+        res.render('registration', {title: "Registration"});
 
+    } else {
+        //TODO save user data to DB
+        exports.initSession(req, res);
+    }
 };
 
 //Login form
@@ -59,7 +70,7 @@ exports.gallery = function(req, res) {
 // Login form
 exports.login = function(req, res){
     //tools.log(req.body);
-    res.render('login', { title: 'Sign in', session: req.session });
+    res.render('login', { title: 'Sign in'});
 }
 
 // Process auth
@@ -81,12 +92,12 @@ exports.initSession = function(req, res){
   }
 
   // clean the email from XSS exploits
-  var email = sanitize(req.body.email).trim();
-  email = sanitize(email).xss();
+  var email = req.sanitize('email', "Email is not valid").trim();
+  email = req.sanitize(email).xss();
 
   // is this a valid email ?
   try{
-    check(email).len(6).isEmail();
+    req.assert('email').len(6).isEmail();
   }
   catch(e) {
     req.session.error = "The given email address does not seems to be correct!";
