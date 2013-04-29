@@ -9,7 +9,7 @@ exports.auth = function(req, res, next) {
     next();
   }
   else {
-    res.redirect('/registration');
+    res.render('index', {title: "Home page"});
   }
   
 }

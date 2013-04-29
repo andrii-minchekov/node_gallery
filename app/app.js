@@ -94,10 +94,13 @@ app.configure('development', function(){
     routes.index in the exported route called index in the module route,
     here the module route is defined in routes/index.js.
 */
-app.get('/', mid.auth, routes.registration);
+app.get('/', mid.auth, routes.index);
+app.get('/index', routes.index);
 
-app.post('/registration', routes.registration);
-app.get('/registration', routes.registration);
+app.post('/signup', routes.registration);
+app.get('/signup', routes.registration);
+app.get('/signin', routes.login);
+app.get('/usergallery', routes.gallery);
 
 // Actually let's have a polite url, by redirecting you to /Welcome, it looks nicer
 app.get('/welcome', mid.auth, routes.welcome);

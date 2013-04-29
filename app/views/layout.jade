@@ -5,10 +5,11 @@ doctype 5
 html
   head
     title= title
-    link(rel='stylesheet', href='/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/css/bootstrap-responsive.min.css')
-    script(type="text/javascript", src='/js/jquery-1.7.2.min.js')
-    script(type="text/javascript", src='/js/bootstrap.min.js')
+    link(rel='stylesheet', href='/css/bootstrap.css')
+    link(rel='stylesheet', href='/css/bootstrap-responsive.css')
+    link(rel='stylesheet', href='/css/style.css')
+    script(type="text/javascript", src='/js/jquery-1.9.1.js')
+    script(type="text/javascript", src='/js/bootstrap.js')
     script(type="text/javascript")
         $(".collapse").collapse();
         $('.dropdown-toggle').dropdown();
@@ -22,7 +23,7 @@ html
                     span.icon-bar
                     span.icon-bar
             
-                a.brand(href='/') Express on dotCloud
+                a.brand(href='/') Nodejs Image Gallery upload
                
                 div.nav-collapse
                     ul.nav
@@ -30,6 +31,8 @@ html
                         mixin menuLi({page: page, url:"/welcome", text: "Home"})
                         mixin menuLi({page: page, url:"/who-are-you", text: "Create a session"})
                         mixin menuLi({page: page, url:"/admin", text: "Admin"})
+                        mixin menuLi({page: page, url:"/signin", text: "Sign In"})
+
 
                     ul.nav.pull-right
                         li.divider-vertical

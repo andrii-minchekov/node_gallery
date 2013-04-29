@@ -24,7 +24,7 @@ redisConfig.pass &&
 
 // Root route :D
 exports.index = function(req, res){
-  res.redirect('/welcome');
+  res.render('index', {title: "Home page"});
 };
 
 // Home page
@@ -33,18 +33,33 @@ exports.welcome = function(req, res){
 };
 
 //My registration Form
-exports.registration = function register(req,res) {
+exports.registration = function (req,res) {
+    //TODO validation of user input
     if (req.body.fname && req.body.lname) {
-        res.redirect('/gallery');
+        res.redirect('/usergallery');
         return;
     }
     res.render('registration', {title: "Registration"});
 
 };
 
+//Login form
+/*exports.signin = function(req, res){
+    //TODO validation
+    if(req.body.email && req.body.pass){
+       res.redirect('/usergallery');
+    }
+}*/
+
+//Gallery page
+exports.gallery = function(req, res) {
+    res.render('gallery', {title: "Gallery page"});
+};
+
 // Login form
 exports.login = function(req, res){
-  res.render('login', { title: 'Enter your email', session: req.session });
+    //tools.log(req.body);
+    res.render('login', { title: 'Sign in', session: req.session });
 }
 
 // Process auth
@@ -61,7 +76,7 @@ exports.initSession = function(req, res){
   // check if an email is given
   if(!req.body || !req.body.email) {
     req.session.error = "No email address given";
-    res.redirect('/who-are-you');
+    res.redirect('/signin');
     return;
   }
 
@@ -75,14 +90,14 @@ exports.initSession = function(req, res){
   }
   catch(e) {
     req.session.error = "The given email address does not seems to be correct!";
-    res.redirect('/who-are-you');
+    res.redirect('/signin');
     return;
   }
 
   req.session.email = req.body.email;
   req.session.gravatar = gravatar(req.body.email , 300);
   
-  res.redirect('/welcome');
+  res.redirect('/usergallery');
 }
 
 

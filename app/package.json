@@ -1,5 +1,5 @@
 {
-  "name": "Express-on-dotCloud",
+  "name": "Upload_image_gallery",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -17,7 +17,7 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/dotcloud/express-on-dotcloud"
+    "url": "https://github.com/menya84/node_gallery"
   },
   "keywords": [
     "express",
@@ -26,6 +26,6 @@
     "for",
     "dotCloud"
   ],
-  "author": "jr@dotcloud.com",
+  "author": "menya84@gmail.com",
   "license": "BSD"
 }

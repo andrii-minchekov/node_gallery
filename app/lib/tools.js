@@ -5,7 +5,7 @@ var util = require('util');
 	A wrapper function arround console.log to get a much nicer output
 	
 	console.log does nothing exiting but a toString().
-	util.inspect is a wonderfull tool, it had type highlighting.
+	util.inspect is a wonderful tool, it had type highlighting.
 	hidden to true will show hidden attributes
 	level set the level of recursion
 */
