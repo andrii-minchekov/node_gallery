@@ -3,7 +3,7 @@ extends layout
 block content
     div.span8.offset2
             form#signin.form-horizontal(method="POST", action="/init-session")
-                if (error)
+                if (errors)
                     - var classError = "error"
                 else
                     - var classError = ""
@@ -12,13 +12,13 @@ block content
                     label.control-label(for="email") Email address:
                     div.controls
                         input(type="text", name="email", id="email", placeholder="Enter email")
-                        if (error)
-                            span.help-inline= error
+                        if (errors)
+                            span.help-inline= errors
                     label.control-label(for="email") Password:
                     div.controls
                         input(type="text", name="passwd", id="passwd", placeholder="Enter password")
-                        if (error)
-                            span.help-inline= error
+                        if (errors)
+                            span.help-inline= errors
                     
                     div.form-actions
                         button.btn.btn-primary(type="submit") Sign in

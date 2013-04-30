@@ -1,86 +1,53 @@
-<div class="well">
-    <form id="signup" class="form-horizontal" method="post" action="signup">
-        <legend>Sign Up</legend>
-        <div class="control-group">
-            <label class="control-label">First Name</label>
+.well
+    form#signup.form-horizontal(method='post', action='signup')
+        legend Sign Up
+        .control-group
+          label.control-label First Name
+          .controls
+            .input-prepend
+              span.add-on
+                i.icon-user
+              input#fname.input-xlarge(type='text', name='fname', placeholder='First Name')
+        .control-group
+          label.control-label Last Name
+          .controls
+            .input-prepend
+              span.add-on
+                i.icon-user
+              input#lname.input-xlarge(type='text', name='lname', placeholder='Last Name')
+        .control-group
+          label.control-label Email
+          .controls
+            .input-prepend
+              span.add-on
+                i.icon-envelope
+              input#email.input-xlarge(type='text', name='email', placeholder='Email')
+        .control-group
+          label.control-label Gender
+          .controls
+            p
+              #gender.btn-group(name='gender', data-toggle='buttons-radio')
+                button.btn.btn-info(type='button') Male
+                button.btn.btn-info(type='button') Female
+        .control-group
+          label.control-label Password
+          .controls
+            .input-prepend
+              span.add-on
+                i.icon-lock
+              input#passwd.input-xlarge(type='Password', name='passwd', placeholder='Password')
+        .control-group
+          label.control-label Confirm Password
+          .controls
+            .input-prepend
+              span.add-on
+                i.icon-lock
+              input#conpasswd.input-xlarge(type='Password', name='conpasswd', placeholder='Re-enter Password')
+        .control-group
+          label.control-label
+          .controls
+            button.btn.btn-success(type='submit') Create My Account
 
-            <div class="controls">
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-user"></i></span>
-                    <input type="text" class="input-xlarge" id="fname" name="fname" placeholder="First Name">
-                </div>
-            </div>
-        </div>
-        <div class="control-group ">
-            <label class="control-label">Last Name</label>
-
-            <div class="controls">
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-user"></i></span>
-                    <input type="text" class="input-xlarge" id="lname" name="lname" placeholder="Last Name">
-                </div>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Email</label>
-
-            <div class="controls">
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-envelope"></i></span>
-                    <input type="text" class="input-xlarge" id="email" name="email" placeholder="Email">
-                </div>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Gender</label>
-
-            <div class="controls">
-
-                <p>
-
-                <div id="gender" name="gender" class="btn-group" data-toggle="buttons-radio">
-                    <button type="button" class="btn btn-info">Male</button>
-                    <button type="button" class="btn btn-info">Female</button>
-
-                </div>
-                </p>
-
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Password</label>
-
-            <div class="controls">
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-lock"></i></span>
-                    <input type="Password" id="passwd" class="input-xlarge" name="passwd" placeholder="Password">
-                </div>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Confirm Password</label>
-
-            <div class="controls">
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-lock"></i></span>
-                    <input type="Password" id="conpasswd" class="input-xlarge" name="conpasswd"
-                           placeholder="Re-enter Password">
-                </div>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label"></label>
-
-            <div class="controls">
-                <button type="submit" class="btn btn-success">Create My Account</button>
-
-            </div>
-
-        </div>
-
-    </form>
-</div>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#signup").validate({

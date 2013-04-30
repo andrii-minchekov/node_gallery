@@ -39,15 +39,16 @@ exports.welcome = function(req, res){
 //My registration Form
 exports.registration = function (req,res) {
     //TODO validation of user input
-    req.assert("fname", "Fname is Empty").notEmpty();
-    req.assert("lname", "Lname is empty").notEmpty();
-    req.assert("email", "Email is not valid").notEmpty().len(6,64).isEmail();
-    req.assert("passwd", "Password is not proper").len(2);
-    req.assert("passwd", "Error password confirmation").equals(req.body.conpasswd);
+    req.assert("fname", "First name is empty").notEmpty();
+    req.assert("lname", "Last name is empty").notEmpty();
+    req.assert('email', "Email is not valid").len(6).isEmail();
+    req.assert("passwd", "Password is not valid").len(2);
+    req.assert("conpasswd", "Error password confirmation").equals(req.body.passwd);
     var mappedErrors = req.validationErrors(true);
     if (mappedErrors){
+        req.session.errors = mappedErrors;
         res.render('registration', {title: "Registration"});
-
+        return;
     } else {
         //TODO save user data to DB
         exports.initSession(req, res);
@@ -86,7 +87,7 @@ exports.initSession = function(req, res){
 
   // check if an email is given
   if(!req.body || !req.body.email) {
-    req.session.error = "No email address given";
+    req.session.errors = "No email address given";
     res.redirect('/signin');
     return;
   }
@@ -100,7 +101,7 @@ exports.initSession = function(req, res){
     req.assert('email').len(6).isEmail();
   }
   catch(e) {
-    req.session.error = "The given email address does not seems to be correct!";
+    req.session.errors = "The given email address does not seems to be correct!";
     res.redirect('/signin');
     return;
   }

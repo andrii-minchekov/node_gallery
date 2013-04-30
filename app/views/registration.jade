@@ -1,4 +1,92 @@
 extends layout
 
 block content
-    include signup.html
+    .well
+        form#signup.form-horizontal(method='post', action='signup')
+            legend Sign Up
+            if (errors)
+                - var classError = "error"
+            else
+                - var classError = ""
+
+            .control-group
+                label.control-label First Name
+                .controls
+                    .input-prepend
+                        span.add-on
+                            i.icon-user
+                        input#fname.input-xlarge(type='text', name='fname', placeholder='First Name')
+                        if (errors && errors['fname'])
+                            label(for='email').help-inline #{errors['fname']['msg']}
+            .control-group
+                label.control-label Last Name
+                .controls
+                    .input-prepend
+                        span.add-on
+                            i.icon-user
+                        input#lname.input-xlarge(type='text', name='lname', placeholder='Last Name')
+                        if (errors && errors['lname'])
+                            label(for='email').help-inline #{errors['lname']['msg']}
+            .control-group
+                label.control-label Email
+                .controls
+                    .input-prepend
+                        span.add-on
+                            i.icon-envelope
+                        input#email.input-xlarge(type='text', name='email', placeholder='Email')
+                        if (errors && errors['email'])
+                            label(for='email').help-inline #{errors['email']['msg']}
+
+            .control-group
+                label.control-label Gender
+                .controls
+                    p
+                        #gender.btn-group(name='gender', data-toggle='buttons-radio')
+                            button.btn.btn-info(type='button') Male
+                            button.btn.btn-info(type='button') Female
+            .control-group
+                label.control-label Password
+                .controls
+                    .input-prepend
+                        span.add-on
+                            i.icon-lock
+                        input#passwd.input-xlarge(type='Password', name='passwd', placeholder='Password')
+                        if (errors && errors['passwd'])
+                            label(for='email').help-inline #{errors['passwd']['msg']}
+            .control-group
+                label.control-label Confirm Password
+                .controls
+                    .input-prepend
+                        span.add-on
+                            i.icon-lock
+                        input#conpasswd.input-xlarge(type='Password', name='conpasswd', placeholder='Re-enter Password')
+                        if (errors && errors['conpasswd'])
+                            label(for='email').help-inline #{errors['conpasswd']['msg']}
+            .control-group
+                label.control-label
+                .controls
+                    button.btn.btn-success(type='submit') Create My Account
+
+    script(type="text/javascript")
+        $(document).ready(function () {
+            $("#signup").validate({
+                rules: {
+                    fname: "required",
+                    lname: "required",
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    passwd: {
+                        required: true,
+                        minlength: 2
+                    },
+                    conpasswd: {
+                        required: true,
+                        equalTo: "#passwd"
+                    },
+                    gender: "required"
+                },
+                errorClass: "help-inline"
+            });
+        });

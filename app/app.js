@@ -63,12 +63,12 @@ app.configure(function()//noinspection JSValidateTypes,JSValidateTypes
     res.locals.page = req._parsedUrl.pathname;
 
     // This can also be used to handle errors
-    if (req.session.error) {
-      res.locals.error = req.session.error;
-      delete req.session.error;
+    if (req.session.errors) {
+      res.locals.errors = req.session.errors;
+      delete req.session.errors;
     }
     else
-      res.locals.error = undefined;
+      res.locals.errors = undefined;
 
     // Something you may want to do
     res.locals.session = req.session;
