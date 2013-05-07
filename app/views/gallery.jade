@@ -1,5 +1,28 @@
 extends layout
+
 block content
     div.container
         div.well
-            p Upload your image here
+            legend=title
+            form#UploadForm.form-horizontal(name="UploadForm", action="/usergallery", enctype="multipart/form-data", method="post")
+                .control-group
+                    label.control-label Select image
+                    .controls
+                        .input-prepend
+                        span.add-on
+                        input.input-text(type='file', name='UploadForm_File', value='Open')
+                    //<span class="btn btn-file">Upload<input type="file" /></span>
+                .control-group
+                    label.control-label Image title
+                    .controls
+                        .input-prepend
+                        span.add-on
+                        input.input-text(type='text', name='UploadForm_ImageTitle', value='', placeholder='Enter image title here')
+                .control-group
+                    label.control-label Image description
+                    .controls
+                        .input-prepend
+                        span.add-on
+                        input.input-text(type='text', name='UploadForm_ImageDesc', value='', placeholder='Enter image description here')
+                    div.form-actions
+                        input.btn.btn-primary(type="submit", value="Upload") Upload

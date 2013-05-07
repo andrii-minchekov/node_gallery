@@ -2,8 +2,8 @@ extends layout
 
 block content
     .well
-        form#signup.form-horizontal(method='post', action='signup')
-            legend Sign Up
+        legend Sign Up
+        form#signup.form-horizontal(method='post', action='/signup')
             if (errors)
                 - var classError = "error"
             else

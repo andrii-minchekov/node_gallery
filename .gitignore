@@ -18,3 +18,4 @@ npm-debug.log
 .dotcloud
 .idea
 dotcloud.yml
+image-store

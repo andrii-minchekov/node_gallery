@@ -1,4 +1,5 @@
 var tools = require('../lib/tools.js');
+var fs = require('fs');
 
 var redisConfig = {
     host: process.env.DOTCLOUD_REDIS_REDIS_HOST || '127.0.0.1',
@@ -65,7 +66,43 @@ exports.registration = function (req,res) {
 
 //Gallery page
 exports.gallery = function(req, res) {
-    res.render('gallery', {title: "Gallery page"});
+    if (req.method === 'POST' && req.is('multipart/form-data')) {
+        //handle input and save data to DB
+        var user_image_path = req.session.appRootdir + '\\image-store\\' + req.session.email;
+        fs.stat(user_image_path, function(err, stats) {
+            if (err) {
+                //make directory
+                fs.mkdirSync(user_image_path);
+                /*function(err,data){
+                    if(err) {
+                        res.send({
+                            error: 'Ah crap! Directory could not be created'
+                        });
+                    } else tools.log(data);
+                })*/
+            } else {
+                tools.log(user_image_path + " Image directory already exists");
+            }
+        })
+
+        fs.rename(req.files.UploadForm_File.path, user_image_path + '\\' + req.files.UploadForm_File.name,
+            function(error) {
+                if(error) {
+                    res.send({
+                        error: 'Ah crap! Something bad happened'
+                    });
+                    return;
+                }
+                res.render('gallery', {title: "Gallery page after success upload such "  + user_image_path + '\\' + req.files.UploadForm_File.name});
+                /*res.send({
+                    path: serverPath
+                });*/
+            });
+
+    }
+    else {
+        res.render('gallery', {title: "Gallery page"});
+    }
 };
 
 // Login form
