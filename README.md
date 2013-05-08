@@ -1,7 +1,7 @@
-express-on-dotcloud
+Java-script Image gallery implementation with using Nodejs, Express, Jade
 ===================
+@author a.minchekov
+A ready to push on dotcloud Express app.
 
-A ready to push on dotcloud boiler plate express app.
 
-
-http://express-dotcloud-labs.dotcloud.com
+Facilitating with push to http://dotcloud.com
