@@ -16,5 +16,4 @@ npm-debug.log
 
 .DS_Store
 .idea
-dotcloud.yml
 image-store
