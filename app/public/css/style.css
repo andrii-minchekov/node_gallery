@@ -6,3 +6,15 @@ div.info {
     float: left;
     width: 50%;
 }
+
+#image-list {
+    text-align: center;
+    /*width: 800px;
+    border: 1px solid #333333;
+    */
+    float: left;
+}
+
+#image-list a {
+    display: inline-block;
+}

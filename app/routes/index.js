@@ -64,11 +64,14 @@ exports.registration = function (req,res) {
     }
 }*/
 
-//Gallery page
+//--Gallery page
 exports.gallery = function(req, res) {
+    var user_image_path = req.session.appRootdir + '\\image-store\\' + req.session.email;
+    var imageCount;
+    //this part handle POST method
     if (req.method === 'POST' && req.is('multipart/form-data')) {
         //handle input and save data to DB
-        var user_image_path = req.session.appRootdir + '\\image-store\\' + req.session.email;
+
         fs.stat(user_image_path, function(err, stats) {
             if (err) {
                 //make directory
@@ -81,7 +84,7 @@ exports.gallery = function(req, res) {
                     } else tools.log(data);
                 })*/
             } else {
-                tools.log(user_image_path + " Image directory already exists");
+                tools.log(user_image_path + " Store directory already exists");
             }
         })
 
@@ -89,21 +92,59 @@ exports.gallery = function(req, res) {
             function(error) {
                 if(error) {
                     res.send({
-                        error: 'Ah crap! Something bad happened'
+                        error: 'Error! Something bad happened while renaming image'
                     });
                     return;
                 }
-                res.render('gallery', {title: "Gallery page after success upload such "  + user_image_path + '\\' + req.files.UploadForm_File.name});
-                /*res.send({
-                    path: serverPath
-                });*/
+
+
+                fs.readdir(user_image_path, function(err, imageList) {
+                    if(err) {
+                        imageCount = 0;
+                        res.render('gallery', {title: "Gallery page", errorMessage: "Can't read your image directory", imageCount: imageCount});
+                    } else {
+                        imageCount = imageList.length;
+                        res.render('gallery', {title: "Gallery page", errorMessage: "Your image \"" + req.files.UploadForm_File.name + "\" was successfully uploaded to your store"
+                            , imageCount: imageCount, imageList : imageList});
+                    }
+                });
             });
 
     }
+    //this part is for GET request
     else {
-        res.render('gallery', {title: "Gallery page"});
+        //res.render('gallery', {title: "Gallery page"});
+        //read user image directory
+        fs.readdir(user_image_path, function(err, imageList) {
+            if(err) {
+                imageCount = 0;
+                res.render('gallery', {title: "Gallery page", errorMessage: "Can't read your image directory", imageCount: imageCount});
+            } else {
+                imageCount = imageList.length;
+                res.render('gallery', {title: "Gallery page", imageCount: imageCount, imageList : imageList});
+
+            }
+        });
     }
 };
+
+exports.imageOutput = function(req, res) {
+    var imagePath = req.session.imageStoreDir + req.session.email + "/" + req.query.imageName;
+    var stats = fs.statSync(imagePath);
+    res.writeHead(200, {
+        'Content-Type': 'imeg/jpeg',
+        'Content-Length': stats.size
+    });
+
+    var readStream = fs.createReadStream(imagePath);
+    readStream.on('data', function(data) {
+        res.write(data);
+    });
+
+    readStream.on('end', function() {
+        res.end();
+    });
+}
 
 // Login form
 exports.login = function(req, res){

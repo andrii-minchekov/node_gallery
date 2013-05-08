@@ -30,6 +30,7 @@ var redisOptions = {
 app.configure(function ()//noinspection JSValidateTypes,JSValidateTypes
 {
     // Setup the port from the UNIX environement with a fallback , practical for dev and prod
+    //app.set('imageStoreDir', __dirname + "/image-store/");
     app.set('port', process.env.WWW_PORT || 8080);
 
     app.set('views', __dirname + '/views');
@@ -67,6 +68,7 @@ app.configure(function ()//noinspection JSValidateTypes,JSValidateTypes
         res.locals.page = req._parsedUrl.pathname;
 
         req.session.appRootdir = __dirname;
+        req.session.imageStoreDir = __dirname + "/image-store/";
         // This can also be used to handle errors
         if (req.session.errors) {
             res.locals.errors = req.session.errors;
@@ -114,6 +116,7 @@ app.post('/init-session', routes.initSession);
 
 app.get('/usergallery', mid.auth, routes.gallery);
 app.post('/usergallery', mid.auth, routes.gallery);
+app.get('/getImage', mid.auth, routes.imageOutput);
 // Actually let's have a polite url, by redirecting you to /Welcome, it looks nicer
 app.get('/welcome', mid.auth, routes.welcome);
 
