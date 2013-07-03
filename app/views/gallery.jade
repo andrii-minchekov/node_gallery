@@ -35,5 +35,5 @@ block content
             //loop images from user directory
             - if (typeof imageList !== 'undefined')
                 each file in imageList
-                    a(href='')
+                    a(href='/getImage?imageName=#{file}')
                         img(src="/getImage?imageName=#{file}", width="200px", alt="#{file}")
