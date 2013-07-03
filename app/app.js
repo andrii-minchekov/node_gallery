@@ -1,5 +1,6 @@
 // Module dependencies
 var express = require('express');
+var fs = require('fs');
 
 // this is just like doing: var routes = require('./routes/index.js')
 var routes = require('./routes');
@@ -69,6 +70,24 @@ app.configure(function ()//noinspection JSValidateTypes,JSValidateTypes
 
         req.session.appRootdir = __dirname;
         req.session.imageStoreDir = __dirname + "/image-store/";
+        fs.stat(req.session.imageStoreDir, function(err, stats) {
+            if (err) {
+                //make directory
+                fs.mkdirSync(req.session.imageStoreDir);
+                fs.stat(req.session.imageStoreDir + "/tmp/",
+                    function(err, stats) {
+                        if (err) {
+                            //make directory
+                            fs.mkdirSync(req.session.imageStoreDir + "/tmp/");
+                        } else {
+                            tools.log("Temporary directory already exists");
+                        }
+                    }
+                );
+            } else {
+                tools.log("Whole Gallery Store directory already exists");
+            }
+        })
         // This can also be used to handle errors
         if (req.session.errors) {
             res.locals.errors = req.session.errors;
