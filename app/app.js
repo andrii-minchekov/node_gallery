@@ -44,8 +44,8 @@ app.configure(function ()//noinspection JSValidateTypes,JSValidateTypes
 
     app.use(express.logger('dev'));
     app.use(express.bodyParser({
-        uploadDir: __dirname + '/image-store/tmp',
-        keepExtensions: true,
+        uploadDir: __dirname + path.sep + "image-store" + path.sep + "tmp",
+        keepExtensions: true
     }));
 
     app.use(express.limit('5mb'));
@@ -115,7 +115,7 @@ app.get('/signin', routes.login);
 app.post('/init-session', routes.initSession);
 
 app.get('/usergallery', mid.auth, routes.gallery);
-app.post('/usergallery', mid.auth, routes.gallery);
+app.post('/usergallery', mid.auth, routes.upload);
 app.get('/getImage', mid.auth, routes.imageOutput);
 // Actually let's have a polite url, by redirecting you to /Welcome, it looks nicer
 app.get('/welcome', mid.auth, routes.welcome);

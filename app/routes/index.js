@@ -1,5 +1,6 @@
 var tools = require('../lib/tools.js');
 var fs = require('fs');
+//var userDAO = require('../model/userDAO.js');
 
 var redisConfig = {
     host: process.env.DOTCLOUD_REDIS_REDIS_HOST || '127.0.0.1',
@@ -52,7 +53,27 @@ exports.registration = function (req,res) {
         return;
     } else {
         //TODO save user data to DB
-        exports.initSession(req, res);
+        red.hget("users:"+req.body.email, 'email',
+            function (err, reply){
+                if (reply) {
+                    tools.log("User " + req.body.email + " already exist");
+                    req.session.errors = {errorMessage: 'Such user already exist in DB'};
+                    res.render('registration', {title: 'Registration'});
+                    return;
+
+                } else {
+                    /* var user = {
+                        email: req.body.email,
+                        passwd: req.body.passwd,
+                        fname: req.body.fname,
+                        lname: req.body.lname
+                    }*/
+                    red.hmset("users:"+req.body.email, 'email', req.body.email, 'passwd', req.body.passwd, 'fname', req.body.fname,
+                        'lname', req.body.lname, red.print);
+                    exports.initSession(req, res);
+                }
+            }
+        );
     }
 };
 
@@ -64,12 +85,12 @@ exports.registration = function (req,res) {
     }
 }*/
 
-//--Gallery page
-exports.gallery = function(req, res) {
+//Gallery page. Handle upload of image
+exports.upload = function(req, res) {
     var user_image_path = req.session.appRootdir + '\\image-store\\' + req.session.email;
     var imageCount;
     //this part handle POST method
-    if (req.method === 'POST' && req.is('multipart/form-data')) {
+    if (req.method.toLowerCase() === 'post' && req.is('multipart/form-data')) {
         //handle input and save data to DB
 
         fs.stat(user_image_path, function(err, stats) {
@@ -92,11 +113,10 @@ exports.gallery = function(req, res) {
             function(error) {
                 if(error) {
                     res.send({
-                        error: 'Error! Something bad happened while renaming image'
+                        error: 'Error! Something bad happened while renaming image. See routes/index.js exports.upload function '
                     });
                     return;
                 }
-
 
                 fs.readdir(user_image_path, function(err, imageList) {
                     if(err) {
@@ -109,24 +129,25 @@ exports.gallery = function(req, res) {
                     }
                 });
             });
-
-    }
-    //this part is for GET request
-    else {
-        //res.render('gallery', {title: "Gallery page"});
-        //read user image directory
-        fs.readdir(user_image_path, function(err, imageList) {
-            if(err) {
-                imageCount = 0;
-                res.render('gallery', {title: "Gallery page", errorMessage: "Can't read your image directory", imageCount: imageCount});
-            } else {
-                imageCount = imageList.length;
-                res.render('gallery', {title: "Gallery page", imageCount: imageCount, imageList : imageList});
-
-            }
-        });
     }
 };
+//this part is for gallery GET request
+exports.gallery = function(req, res) {
+    var user_image_path = req.session.appRootdir + '\\image-store\\' + req.session.email;
+    var imageCount;
+    //read user image directory
+    fs.readdir(user_image_path, function(err, imageList) {
+        if(err) {
+            imageCount = 0;
+            res.render('gallery', {title: "Gallery page", errorMessage: "Can't read your image directory", imageCount: imageCount});
+        } else {
+            imageCount = imageList.length;
+            res.render('gallery', {title: "Gallery page", imageCount: imageCount, imageList : imageList});
+
+        }
+    });
+};
+
 
 exports.imageOutput = function(req, res) {
     var imagePath = req.session.imageStoreDir + req.session.email + "/" + req.query.imageName;
@@ -144,13 +165,13 @@ exports.imageOutput = function(req, res) {
     readStream.on('end', function() {
         res.end();
     });
-}
+};
 
 // Login form
 exports.login = function(req, res){
     //tools.log(req.body);
     res.render('login', { title: 'Sign in'});
-}
+};
 
 // Process auth
 exports.initSession = function(req, res){
@@ -183,12 +204,36 @@ exports.initSession = function(req, res){
     res.redirect('/signin');
     return;
   }
+  red.hget("users:" + req.body.email, 'email',
+    function (err, reply){
+        if (reply) {
+            tools.log("User exist");
+            red.hget('users:'+req.body.email, 'passwd',
+                function(err, reply) {
+                    if (err) throw err;
+                    if (reply == req.body.passwd) {
+                        tools.log(reply);
+                        tools.log("User " + req.body.email + " exist. Welcome!");
+                        req.session.email = req.body.email;
+                        req.session.gravatar = gravatar(req.body.email , 300);
+                        res.redirect('/usergallery');
+                        return;
+                    } else {
+                        req.session.errors = "The given password is not correct. Please enter the correct password";
+                        res.redirect('/signin');
+                        return;
+                    }
+                }
+            );
+        }  else {
+            req.session.errors = "The given email address does not exist on this site. Please enter correct data or register";
+            res.redirect('/signin');
+            return;
+        }
+    }
 
-  req.session.email = req.body.email;
-  req.session.gravatar = gravatar(req.body.email , 300);
-  
-  res.redirect('/usergallery');
-}
+    );
+};
 
 
 // admin page
@@ -202,4 +247,4 @@ exports.admin = function(req, res){
         res.render('admin', {title: 'Super secret admin page :D', users: d})
       })
   });
-}
+};

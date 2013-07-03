@@ -3,9 +3,11 @@ extends layout
 block content
     .well
         legend Sign Up
+
         form#signup.form-horizontal(method='post', action='/signup')
             if (errors)
                 - var classError = "error"
+                #classError #{errors.errorMessage}
             else
                 - var classError = ""
 
