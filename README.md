@@ -1,9 +1,6 @@
-Java-script Image gallery implementation using
-Nodejs, Express, Jade
+Image gallery implementation using Server side JavaScript, Nodejs, Express, Jade
 ===================
 @author a.minchekov.
 
 A ready to push on dotcloud Express app.
 
-
-Can be pushed to http://dotcloud.com
