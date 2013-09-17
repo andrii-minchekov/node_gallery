@@ -1,4 +1,4 @@
-Image gallery implementation using JavaScript, Nodejs, Express, Jade
+Image gallery implementation using JavaScript, Node.js, Express, Jade
 ===================
 @author a.minchekov.
 
